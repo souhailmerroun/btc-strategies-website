@@ -6,15 +6,21 @@
   <title>BTC Strategies Feedback</title>
   
   <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRFFeM2dYfbz3e6O3Nml5s0EMMlTWeB0F1skc9VEo" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
     body {
       background-color: #f8f9fa;
       padding: 20px;
     }
-    .strategy-card {
-      margin-bottom: 15px;
+    .strategy-list {
+      cursor: pointer;
+    }
+    .strategy-list .active {
+      background-color: #e2e6ea;
+    }
+    .card {
+      margin-left: 15px;
     }
   </style>
 </head>
@@ -22,46 +28,95 @@
 
   <div class="container">
     <h1 class="text-center">BTC Strategies Feedback</h1>
-    <div id="feedback-container" class="row mt-4">
-      <!-- Feedback Cards Will be Injected Here -->
+    <div class="row mt-4">
+      
+      <!-- Left column: Strategy List -->
+      <div class="col-md-4">
+        <ul id="strategy-list" class="list-group strategy-list">
+          <!-- Strategies will be inserted here -->
+        </ul>
+      </div>
+
+      <!-- Right column: Strategy Feedback -->
+      <div class="col-md-8">
+        <div id="feedback-card" class="card">
+          <div class="card-body">
+            <h5 id="card-title" class="card-title">Strategy Name</h5>
+            <p id="card-text" class="card-text">Strategy feedback will be displayed here</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Bootstrap 5 JS and Popper.js -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-mQ93+kUyjo8Cd+gxOGwCzYpdNhA74ZrTv+9Cx/4B7NB1z1K5S3eFjgiZAY3K2Ktq" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- JavaScript to Fetch and Display JSON Feedback -->
   <script>
-    // URL of your JSON file in S3
     const jsonUrl = 'https://souhailmerroun-entrepreneur.s3.eu-west-3.amazonaws.com/btc_strategies/BTCUSDT_strategies_feedback_20241017_102921.json';
 
-    // Function to create Bootstrap cards for each feedback strategy
-    function createStrategyCard(title, feedback) {
+    let strategies = {};  // To hold strategies data
+    let activeStrategy = '';  // To track the active strategy
+
+    // Function to create the strategy list items
+    function createStrategyListItem(strategy) {
       return `
-        <div class="col-md-6 strategy-card">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">${title}</h5>
-              <p class="card-text">${feedback}</p>
-            </div>
-          </div>
-        </div>
+        <li class="list-group-item" data-strategy="${strategy}">
+          ${strategy}
+        </li>
       `;
+    }
+
+    // Function to display feedback for a selected strategy
+    function displayStrategyFeedback(strategy) {
+      document.getElementById('card-title').textContent = strategy;
+      document.getElementById('card-text').textContent = strategies[strategy];
+    }
+
+    // Function to handle strategy selection
+    function handleStrategySelection(event) {
+      const selectedStrategy = event.target.getAttribute('data-strategy');
+      if (selectedStrategy) {
+        // Update active strategy styling
+        document.querySelectorAll('.list-group-item').forEach(item => {
+          item.classList.remove('active');
+        });
+        event.target.classList.add('active');
+
+        // Update card with the selected strategy feedback
+        displayStrategyFeedback(selectedStrategy);
+      }
     }
 
     // Fetch JSON data from the S3 URL and display feedback
     async function loadFeedback() {
       try {
         const response = await fetch(jsonUrl);
-        const data = await response.json();
+        strategies = await response.json();
         
-        const feedbackContainer = document.getElementById('feedback-container');
+        const strategyList = document.getElementById('strategy-list');
 
-        // Loop through each strategy and create a card for it
-        for (const [strategy, feedback] of Object.entries(data)) {
-          const cardHtml = createStrategyCard(strategy, feedback);
-          feedbackContainer.innerHTML += cardHtml;
-        }
+        // Loop through each strategy and create a list item
+        Object.keys(strategies).forEach((strategy, index) => {
+          const listItemHtml = createStrategyListItem(strategy);
+          strategyList.innerHTML += listItemHtml;
+
+          // Set first strategy as the default selected one
+          if (index === 0) {
+            activeStrategy = strategy;
+          }
+        });
+
+        // Attach click event listener to the list items
+        document.querySelectorAll('.list-group-item').forEach(item => {
+          item.addEventListener('click', handleStrategySelection);
+        });
+
+        // Set the first strategy as active by default
+        document.querySelector('.list-group-item').classList.add('active');
+        displayStrategyFeedback(activeStrategy);
+        
       } catch (error) {
         console.error('Error fetching feedback:', error);
       }
