@@ -24,7 +24,7 @@ exports.createPages = async ({ actions }) => {
   /**
    * Page for strategies
    */
-  const template = path.resolve(`src/templates/index.js`); // Adjust if necessary
+  const template = path.resolve(`src/templates/technical-analysis.js`); // Adjust if necessary
   const currencies = ["btc", "eth", "sol"]; // Add more currencies as needed
 
   currencies.forEach(currency => {
