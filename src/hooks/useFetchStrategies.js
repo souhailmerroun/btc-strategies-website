@@ -62,7 +62,7 @@ const useFetchStrategies = (currencyPair) => {
             acc[category] = strategies.map((strategy) => ({
               name: strategy,
               feedback: feedbackData[strategy], // Fetch feedback from the response
-              image: `${strategy.replace(/[^a-z0-9]/g, "_")}_chart_${currencyPair}.png`, // Generate image names dynamically
+              image: `${strategy}_chart_${currencyPair}.png`, // Generate image names dynamically
             }));
             return acc;
           },
