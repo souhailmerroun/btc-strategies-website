@@ -4,7 +4,43 @@ import { useEffect, useState } from 'react';
 const useFetchStrategies = (currencyPair) => {
   const [strategiesData, setStrategiesData] = useState({});
   const [error, setError] = useState(null);
-  
+
+  // Define strategy categories with their corresponding strategy names
+  const strategyCategories = {
+    "Trend Following Strategies": [
+      "MovingAverageStrategySMA",
+      "MovingAverageStrategyEMA",
+      "IchimokuCloudStrategy",
+      "ADXStrategy",
+      "ParabolicSARStrategy",
+      "DonchianChannelStrategy",
+      "GannTheoryStrategy",
+    ],
+    "Momentum Strategies": [
+      "MACDStrategy",
+      "RSIStrategy",
+      "StochasticOscillatorStrategy",
+      "ATRStrategy",
+      "VolumeProfileStrategy",
+      "VWAPStrategy",
+    ],
+    "Volatility Strategies": [
+      "BollingerBandsStrategy",
+      "KeltnerChannelStrategy",
+    ],
+    "Price Action Strategies": [
+      "PriceActionStrategy",
+      "RenkoChartStrategy",
+      "PivotPointsStrategy",
+    ],
+    "Support and Resistance Strategies": [
+      "FibonacciRetracementStrategy",
+    ],
+    "Seasonality Strategies": [
+      "SeasonalityStrategy",
+    ],
+  };
+
   useEffect(() => {
     const fetchFeedback = async () => {
       const currentDate = new Date()
@@ -21,77 +57,17 @@ const useFetchStrategies = (currencyPair) => {
         const feedbackData = await response.json();
 
         // Combine feedback with strategy data
-        const updatedStrategiesData = {
-          'Trend Following Strategies': [
-            {
-              name: 'MovingAverageStrategySMA',
-              feedback: feedbackData['MovingAverageStrategySMA'],
-              image: `${currencyPair}_sma_chart.png`,
-            },
-            {
-              name: 'MovingAverageStrategyEMA',
-              feedback: feedbackData['MovingAverageStrategyEMA'],
-              image: `${currencyPair}_ema_chart.png`,
-            },
-            {
-              name: 'IchimokuCloudStrategy',
-              feedback: feedbackData['IchimokuCloudStrategy'],
-              image: `ichimoku_cloud_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'ADXStrategy',
-              feedback: feedbackData['ADXStrategy'],
-              image: `adx_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'ParabolicSARStrategy',
-              feedback: feedbackData['ParabolicSARStrategy'],
-              image: `parabolic_sar_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'DonchianChannelStrategy',
-              feedback: feedbackData['DonchianChannelStrategy'],
-              image: `donchian_channel_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'GannTheoryStrategy',
-              feedback: feedbackData['GannTheoryStrategy'],
-              image: `gann_theory_chart_${currencyPair}.png`,
-            },
-          ],
-          'Momentum Strategies': [
-            {
-              name: 'MACDStrategy',
-              feedback: feedbackData['MACDStrategy'],
-              image: `macd_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'RSIStrategy',
-              feedback: feedbackData['RSIStrategy'],
-              image: `rsi_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'StochasticOscillatorStrategy',
-              feedback: feedbackData['StochasticOscillatorStrategy'],
-              image: `stochastic_oscillator_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'ATRStrategy',
-              feedback: feedbackData['ATRStrategy'],
-              image: `atr_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'VolumeProfileStrategy',
-              feedback: feedbackData['VolumeProfileStrategy'],
-              image: `volume_profile_chart_${currencyPair}.png`,
-            },
-            {
-              name: 'VWAPStrategy',
-              feedback: feedbackData['VWAPStrategy'],
-              image: `vwap_chart_${currencyPair}.png`,
-            },
-          ],
-        };
+        const updatedStrategiesData = Object.entries(strategyCategories).reduce(
+          (acc, [category, strategies]) => {
+            acc[category] = strategies.map((strategy) => ({
+              name: strategy,
+              feedback: feedbackData[strategy], // Fetch feedback from the response
+              image: `${strategy.replace(/[^a-z0-9]/g, "_")}_chart_${currencyPair}.png`, // Generate image names dynamically
+            }));
+            return acc;
+          },
+          {}
+        );
 
         setStrategiesData(updatedStrategiesData);
       } catch (error) {
