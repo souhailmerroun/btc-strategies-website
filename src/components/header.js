@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import currencies from "../data/currencies.json";
 
 const Header = ({ siteTitle }) => (
-  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+  <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
     <div className="container-fluid">
       <Link className="navbar-brand" to="/">{siteTitle}</Link>
       <button 
