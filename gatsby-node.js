@@ -1,4 +1,5 @@
 const path = require('path'); // Import the path module
+const currencies = require('./src/data/currencies.json'); // Import the list of currencies
 
 /**
  * Implement Gatsby's Node APIs in this file.
@@ -25,7 +26,6 @@ exports.createPages = async ({ actions }) => {
    * Page for strategies
    */
   const template = path.resolve(`src/templates/technical-analysis.js`); // Adjust if necessary
-  const currencies = ["btc", "eth", "sol", "doge", "ada", "link", "near", "imx", "avax", "xrp", "bch", "ltc"]; // Add more currencies as needed
 
   currencies.forEach(currency => {
     createPage({

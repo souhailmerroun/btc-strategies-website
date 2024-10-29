@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from "gatsby";
+import currencies from "../data/currencies.json";
 
 const Header = ({ siteTitle }) => (
   <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -18,15 +19,11 @@ const Header = ({ siteTitle }) => (
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav"> {/* ms-auto to push nav to the right */}
-          <li className="nav-item">
-            <Link className="nav-link" to="/technical-analysis/btc">BTC</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/technical-analysis/eth">ETH</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to="/technical-analysis/sol">SOL</Link>
-          </li>
+          {currencies.map(currency => (
+            <li key={currency} className="nav-item">
+              <Link className="nav-link" to={`/technical-analysis/${currency}`}>{currency.toUpperCase()}</Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
