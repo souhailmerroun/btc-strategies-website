@@ -1,0 +1,34 @@
+{
+    "Trend Following Strategies": [
+        "MovingAverageStrategySMA",
+        "MovingAverageStrategyEMA",
+        "IchimokuCloudStrategy",
+        "ADXStrategy",
+        "ParabolicSARStrategy",
+        "DonchianChannelStrategy",
+        "GannTheoryStrategy"
+    ],
+    "Momentum Strategies": [
+        "MACDStrategy",
+        "RSIStrategy",
+        "StochasticOscillatorStrategy",
+        "ATRStrategy",
+        "VolumeProfileStrategy",
+        "VWAPStrategy"
+    ],
+    "Volatility Strategies": [
+        "BollingerBandsStrategy",
+        "KeltnerChannelStrategy"
+    ],
+    "Price Action Strategies": [
+        "PriceActionStrategy",
+        "RenkoChartStrategy",
+        "PivotPointsStrategy"
+    ],
+    "Support and Resistance Strategies": [
+        "FibonacciRetracementStrategy"
+    ],
+    "Seasonality Strategies": [
+        "SeasonalityStrategy"
+    ]
+}

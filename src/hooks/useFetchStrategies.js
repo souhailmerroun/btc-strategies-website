@@ -1,45 +1,10 @@
 // hooks/useFetchStrategies.js
 import { useEffect, useState } from 'react';
+import strategyCategories from '../data/strategies.json';
 
 const useFetchStrategies = (currencyPair) => {
   const [strategiesData, setStrategiesData] = useState({});
   const [error, setError] = useState(null);
-
-  // Define strategy categories with their corresponding strategy names
-  const strategyCategories = {
-    "Trend Following Strategies": [
-      "MovingAverageStrategySMA",
-      "MovingAverageStrategyEMA",
-      "IchimokuCloudStrategy",
-      "ADXStrategy",
-      "ParabolicSARStrategy",
-      "DonchianChannelStrategy",
-      "GannTheoryStrategy",
-    ],
-    "Momentum Strategies": [
-      "MACDStrategy",
-      "RSIStrategy",
-      "StochasticOscillatorStrategy",
-      "ATRStrategy",
-      "VolumeProfileStrategy",
-      "VWAPStrategy",
-    ],
-    "Volatility Strategies": [
-      "BollingerBandsStrategy",
-      "KeltnerChannelStrategy",
-    ],
-    "Price Action Strategies": [
-      "PriceActionStrategy",
-      "RenkoChartStrategy",
-      "PivotPointsStrategy",
-    ],
-    "Support and Resistance Strategies": [
-      "FibonacciRetracementStrategy",
-    ],
-    "Seasonality Strategies": [
-      "SeasonalityStrategy",
-    ],
-  };
 
   useEffect(() => {
     const fetchFeedback = async () => {
