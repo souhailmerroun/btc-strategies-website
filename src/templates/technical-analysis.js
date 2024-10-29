@@ -1,18 +1,27 @@
 // components/IndexPage.js
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout';
 import useFetchStrategies from '../hooks/useFetchStrategies'; // Adjust the path if necessary
 
 const IndexPage = ({ pageContext }) => {
   const { currencyPair } = pageContext; // Get currencyPair from pageContext
   const { strategiesData, error } = useFetchStrategies(currencyPair); // Use the custom hook
+  const [expandedCategories, setExpandedCategories] = useState({}); // State to manage collapsible categories
 
-  // Scroll to a specific strategy card when clicked in the menu
+  // Function to scroll to a specific strategy card
   const scrollToStrategy = (strategy) => {
     const element = document.getElementById(strategy);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  // Toggle category visibility
+  const toggleCategory = (category) => {
+    setExpandedCategories((prevState) => ({
+      ...prevState,
+      [category]: !prevState[category],
+    }));
   };
 
   const baseImageUrl =
@@ -38,19 +47,27 @@ const IndexPage = ({ pageContext }) => {
             >
               {Object.entries(strategiesData).map(([category, strategies]) => (
                 <React.Fragment key={category}>
-                  <li className="list-group-item bg-dark text-white">
+                  <li
+                    className="list-group-item bg-dark text-white"
+                    onClick={() => toggleCategory(category)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {category}
+                    <span style={{ float: 'right' }}>
+                      {expandedCategories[category] ? '-' : '+'}
+                    </span>
                   </li>
-                  {strategies.map((strategy) => (
-                    <li
-                      key={strategy.name}
-                      className="list-group-item"
-                      onClick={() => scrollToStrategy(strategy.name)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {strategy.name}
-                    </li>
-                  ))}
+                  {expandedCategories[category] &&
+                    strategies.map((strategy) => (
+                      <li
+                        key={strategy.name}
+                        className="list-group-item"
+                        onClick={() => scrollToStrategy(strategy.name)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {strategy.name}
+                      </li>
+                    ))}
                 </React.Fragment>
               ))}
             </ul>
