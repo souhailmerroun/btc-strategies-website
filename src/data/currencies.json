@@ -1,7 +1,10 @@
 [
     "btc",
     "eth",
+    "bnb",
     "sol",
+    "trx",
+    "ton",
     "doge",
     "ada",
     "link",
@@ -10,5 +13,19 @@
     "avax",
     "xrp",
     "bch",
-    "ltc"
+    "ltc",
+    "shib",
+    "dot",
+    "dai",
+    "apt",
+    "uni",
+    "pepe",
+    "tao",
+    "pnut",
+    "bonk",
+    "wif",
+    "floki",
+    "xec",
+    "sui",
+    "xlm"
 ]
